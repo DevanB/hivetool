@@ -31,14 +31,26 @@ jobs:
           path: vendor
           key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
 
-      - name: Install Dependencies
+      - name: Cache npm dependencies
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Composer Dependencies
         if: steps.cache-vendor.outputs.cache-hit != 'true'
-        run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm install
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Install npm Dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm install
 
       - name: Run Pint
         run: vendor/bin/pint
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --error-format=github
 
       - name: Format Frontend
         run: npm run format

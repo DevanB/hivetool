@@ -25,6 +25,13 @@ jobs:
           tools: composer:v2
           coverage: xdebug
 
+      - name: Cache Vendor
+        id: cache-vendor
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -41,6 +48,7 @@ jobs:
         run: touch database/database.sqlite
 
       - name: Install Dependencies
+        if: steps.cache-vendor.outputs.cache-hit != 'true'
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy Environment File
