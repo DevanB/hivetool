@@ -24,6 +24,6 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         DB::prohibitDestructiveCommands(app()->isProduction());
-        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
     }
 }
