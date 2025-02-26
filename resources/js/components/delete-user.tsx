@@ -1,7 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
 
-// Components...
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -70,7 +69,7 @@ export default function DeleteUser() {
                                 <InputError message={errors.password} />
                             </div>
 
-                            <DialogFooter>
+                            <DialogFooter className="gap-2">
                                 <DialogClose asChild>
                                     <Button variant="secondary" onClick={closeModal}>
                                         Cancel
