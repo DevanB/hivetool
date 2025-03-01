@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -33,20 +36,16 @@ jobs:
       - name: Install npm Dependencies
         run: npm install
 
-      - name: Run Pint
-        run: vendor/bin/pint
+      - name: "Duster Lint"
+        uses: tighten/duster-action@v3
+        with:
+          args: lint
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --error-format=github
 
       - name: Format Frontend
-        run: npm run format
+        run: npm run format:check
 
       - name: Lint Frontend
-        run: npm run lint
-
-      # - name: Commit Changes
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     commit_message: fix code style
-      #     commit_options: '--no-verify'
+        run: npm run lint:check
