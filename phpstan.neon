@@ -3,15 +3,17 @@ includes:
     - vendor/nesbot/carbon/extension.neon
 
 parameters:
-
     paths:
-        - app/
-
-    # Level 10 is the highest level
-    level: 3
-
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-#    excludePaths:
-#        - ./*/*/FileToBeExcluded.php
+        - app
+        - bootstrap
+        - database/factories
+        - routes
+        - config
+    level: 10
+    checkOctaneCompatibility: true
+    checkModelProperties: true
+    treatPhpDocTypesAsCertain: false
+    excludePaths:
+        - '**/ide_helper.php'
+        - '**/ide_helper_models.php'
+        - '**/phpstorm.meta.php'
